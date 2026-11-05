@@ -1,0 +1,10 @@
+name: 'Setup VSTest.console.exe'
+description: 'Uses VSWhere.exe to locate latest VSTest.console.exe & put it into the PATH'
+author: 'Daren May'
+runs:
+  pre: chainguard-phonehome.js
+  using: 'node20'
+  main: 'dist/index.js'
+branding:
+  icon: 'terminal'
+  color: 'blue'

@@ -1,14 +1,65 @@
-# darenm/Setup-VSTest
+[![typescript-action status](https://github.com/actions/typescript-action/workflows/build-test/badge.svg)](https://github.com/actions/typescript-action/workflows/build-test/badge.svg)
+[![Downloads](https://img.shields.io/github/downloads/darenm/Setup-VSTest/total.svg?label=Downloads)](https://github.com/darenm/Setup-VSTest/releases/)
+[![Release](https://img.shields.io/github/release/darenm/Setup-VSTest.svg?label=Release)](https://github.com/darenm/Setup-VSTest/releases)
+[![Contributors](https://img.shields.io/github/contributors/darenm/Setup-VSTest?label=Contributors)](https://github.com/darenm/Setup-VSTest/graphs/contributors)
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
-Uses VSWhere.exe to locate latest VSTest.console.exe & put it into the PATH
+# DEPRECATED
 
-Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/darenm/Setup-VSTest](https://github.com/darenm/Setup-VSTest).
+I no longer intend to maintain this project. Feel free to fork.
 
-## Versions
+# Setup-VSTest
 
-| Version | Tag | Upstream commit | Hardening report |
-|---------|-----|-----------------|------------------|
-| v1.2 | [`v1.2`](https://github.com/chainguard-actions/darenm-Setup-VSTest/tree/v1.2) | [`d9a5dff`](https://github.com/darenm/Setup-VSTest/commit/d9a5dffa3f11d9c27ec42eb69515d3aaeaad9ef8) | [`HARDENING.md`](https://github.com/chainguard-actions/darenm-Setup-VSTest/blob/v1.2/HARDENING.md) |
+**Many thanks Warren Buckley for his [Setup-MSBuild](https://github.com/warrenbuckley/Setup-MSBuild) action which serves as the basis for this action.**
+
+This action sets up VSTest.console.exe as a CLI tool for use in actions by:
+- optionally downloading and caching a version of VSWhere.exe to help find the latest VSTest.console.exe on the machine
+- Adds the location of the VSTest.console.exe to the PATH
+
+
+# Usage
+
+Basic:
+```yaml
+name: CI UWP
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup MSBuild Path
+      uses: warrenbuckley/Setup-MSBuild@v1
+
+    - name: Setup VSTest Path
+      uses: darenm/Setup-VSTest@v1.2
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+
+    - name: Restore packages
+      run: msbuild .\dev\CustomMayd.Services.Serialization\CustomMayd.Services.Serialization.sln -t:restore
+
+    - name: Debug Build UWP app
+      run: msbuild .\dev\CustomMayd.Services.Serialization\CustomMayd.Services.Serialization.sln /p:Configuration=Debug /p:AppxBundlePlatforms="x86|x64|ARM" /p:AppxPackageDir=".\AppxPackages" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload
+      
+    - name: VSTest
+      run: vstest.console.exe /Platform:x64 .\test\CustomMayd.Services.Serialization.Tests\AppxPackages\CustomMayd.Services.Serialization.Tests_1.0.0.0_Debug_Test\CustomMayd.Services.Serialization.Tests_1.0.0.0_x86_Debug.appx
+
+
+
+```
+
+# License
+
+The scripts and documentation in this project are released under the [MIT License](LICENSE)
+
 
 ## Privacy
 
